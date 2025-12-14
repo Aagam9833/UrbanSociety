@@ -1,0 +1,15 @@
+-- Insert member
+insertMember:
+INSERT OR REPLACE INTO society_member(
+    id, name, photo_url, email, phone_number, society_id
+) VALUES (?, ?, ?, ?, ?, ?);
+
+-- Get member by id
+selectMemberById:
+SELECT * FROM society_member
+WHERE id = ?;
+
+-- Get members of a society
+selectMembersBySociety:
+SELECT * FROM society_member
+WHERE society_id = ?;

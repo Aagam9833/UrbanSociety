@@ -1,0 +1,12 @@
+-- Get all societies
+selectAllSocieties:
+SELECT * FROM society;
+
+-- Insert society
+insertSociety:
+INSERT OR REPLACE INTO society(id, society_name, address)
+VALUES (?, ?, ?);
+
+-- Delete society
+deleteSociety:
+DELETE FROM society WHERE id = ?;

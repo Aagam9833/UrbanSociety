@@ -1,0 +1,20 @@
+-- Society Table
+CREATE TABLE society (
+    id TEXT NOT NULL PRIMARY KEY,
+    society_name TEXT NOT NULL,
+    address TEXT NOT NULL
+);
+
+-- Society Member Table
+CREATE TABLE society_member (
+    id TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    photo_url TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    phone_number TEXT NOT NULL,
+    society_id TEXT NOT NULL,
+
+    FOREIGN KEY (society_id)
+        REFERENCES society(id)
+        ON DELETE CASCADE
+);
