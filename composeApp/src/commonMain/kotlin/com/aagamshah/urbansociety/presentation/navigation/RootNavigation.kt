@@ -5,22 +5,39 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.aagamshah.urbansociety.presentation.loginscreen.LoginScreen
+import com.aagamshah.urbansociety.presentation.mainscreen.MainScreen
 
 @Composable
 fun RootNavigation() {
-    val rootNavController = rememberNavController()
+    val navController = rememberNavController()
 
     NavHost(
-        navController = rootNavController,
+        navController = navController,
         startDestination = RootRoute.LoginRoute
     ) {
 
         composable<RootRoute.LoginRoute> {
-            LoginScreen()
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(RootRoute.MainRoute) {
+                        popUpTo(RootRoute.LoginRoute) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
 
         composable<RootRoute.MainRoute> {
-//            MainContainerScreen()
+            MainScreen(
+                onLogout = {
+                    navController.navigate(RootRoute.LoginRoute) {
+                        popUpTo(RootRoute.MainRoute) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
     }
 }

@@ -9,16 +9,23 @@ import com.aagamshah.urbansociety.domain.repository.SocietyMemberRepository
 import com.aagamshah.urbansociety.domain.usecase.GetSocietyMemberUseCase
 import com.aagamshah.urbansociety.domain.usecase.InsertSocietyMemberUseCase
 import com.aagamshah.urbansociety.domain.usecase.LoginUseCase
-import com.aagamshah.urbansociety.presentation.loginscreen.LoginViewModel
+import com.aagamshah.urbansociety.presentation.loginscreen.LoginScreenViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.SupervisorJob
 import org.koin.dsl.module
 
 val commonModule = module {
 
     // ViewModels
-    single { LoginViewModel(get(), get()) }
+    factory {
+        LoginScreenViewModel(
+            loginUseCase = get(),
+            coroutineScope = CoroutineScope(Dispatchers.Main.immediate + SupervisorJob())
+        )
+    }
 
     // Dispatchers
     single<CoroutineDispatcher> { Dispatchers.IO }

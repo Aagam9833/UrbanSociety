@@ -22,7 +22,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -44,27 +43,21 @@ import org.koin.compose.koinInject
 @Composable
 @Preview
 fun LoginScreen(
-    viewModel: LoginViewModel = koinInject()
+    onLoginSuccess: () -> Unit,
+    viewModel: LoginScreenViewModel = koinInject()
 ) {
     val state by viewModel.state.collectAsState()
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
-
     val snackbarHostState = remember { SnackbarHostState() }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            viewModel.clear()
-        }
-    }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                LoginEffect.NavigateToHome -> {
-                    snackbarHostState.showSnackbar("Success")
+                LoginScreenEffect.NavigateToHome -> {
+                    onLoginSuccess()
                 }
 
-                is LoginEffect.ShowError -> {
+                is LoginScreenEffect.ShowError -> {
                     snackbarHostState.showSnackbar(effect.message)
                 }
             }
@@ -93,7 +86,7 @@ fun LoginScreen(
                 value = state.username,
                 onValueChange = {
                     viewModel.onIntent(
-                        LoginIntent.OnUsernameChange(it)
+                        LoginScreenIntent.OnUsernameChange(it)
                     )
                 },
                 label = { Text("Username") },
@@ -111,7 +104,7 @@ fun LoginScreen(
                 value = state.password,
                 onValueChange = {
                     viewModel.onIntent(
-                        LoginIntent.OnPasswordChange(it)
+                        LoginScreenIntent.OnPasswordChange(it)
                     )
                 },
                 label = { Text("Password") },
@@ -149,7 +142,7 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !state.isLoading,
                 onClick = {
-                    viewModel.onIntent(LoginIntent.OnLoginClick)
+                    viewModel.onIntent(LoginScreenIntent.OnLoginClick)
                 }
             ) {
                 if (state.isLoading) {
